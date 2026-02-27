@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>FinNova - Controle Financeiro Inteligente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0F172A;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 400px;
+    }
+    input {
+      padding: 8px;
+      margin: 5px;
+      width: 90%;
+    }
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      background: #16A34A;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>FinNova</h1>
+  <p>Controle Financeiro Inteligente</p>
+
+  <div class="card">
+    <h2>Renda Mensal</h2>
+    <input type="number" id="income" placeholder="Digite sua renda">
+    <button onclick="calculate()">Calcular Planejamento</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const income = document.getElementById('income').value;
+      if (!income) return;
+
+      const invest = income * 0.2;
+      const reserve = income * 0.1;
+      const expenses = income * 0.5;
+      const leisure = income * 0.2;
+
+      document.getElementById('result').innerHTML = `
+        <p><strong>Investimentos (20%)</strong>: R$ ${invest.toFixed(2)}</p>
+        <p><strong>Reserva (10%)</strong>: R$ ${reserve.toFixed(2)}</p>
+        <p><strong>Gastos (50%)</strong>: R$ ${expenses.toFixed(2)}</p>
+        <p><strong>Lazer (20%)</strong>: R$ ${leisure.toFixed(2)}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
