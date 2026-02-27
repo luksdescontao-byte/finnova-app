@@ -9,9 +9,44 @@
       font-family: Arial, sans-serif;
       background: #0F172A;
       color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #0b1220;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: #111827;
+      padding: 10px;
+    }
+
+    nav button {
+      background: #16A34A;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .screen {
+      display: none;
       padding: 20px;
       text-align: center;
     }
+
+    .active {
+      display: block;
+    }
+
     .card {
       background: white;
       color: black;
@@ -20,12 +55,14 @@
       margin: 20px auto;
       max-width: 400px;
     }
+
     input {
       padding: 8px;
       margin: 5px;
       width: 90%;
     }
-    button {
+
+    button.primary {
       padding: 10px;
       margin-top: 10px;
       background: #16A34A;
@@ -34,39 +71,97 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>FinNova</h1>
-  <p>Controle Financeiro Inteligente</p>
+<header>FinNova</header>
 
+<nav>
+  <button onclick="showScreen('home')">Início</button>
+  <button onclick="showScreen('planner')">Planejamento</button>
+  <button onclick="showScreen('expenses')">Gastos</button>
+</nav>
+
+<!-- TELA INÍCIO -->
+<div id="home" class="screen active">
+  <h2>Bem-vindo ao FinNova</h2>
+  <p>Controle Financeiro Inteligente</p>
+</div>
+
+<!-- TELA PLANEJAMENTO -->
+<div id="planner" class="screen">
   <div class="card">
     <h2>Renda Mensal</h2>
     <input type="number" id="income" placeholder="Digite sua renda">
-    <button onclick="calculate()">Calcular Planejamento</button>
-
+    <button class="primary" onclick="calculate()">Calcular</button>
     <div id="result"></div>
   </div>
+</div>
 
-  <script>
-    function calculate() {
-      const income = document.getElementById('income').value;
-      if (!income) return;
+<!-- TELA GASTOS -->
+<div id="expenses" class="screen">
+  <div class="card">
+    <h2>Controle de Gastos</h2>
+    <input type="text" id="expenseDesc" placeholder="Descrição">
+    <input type="number" id="expenseValue" placeholder="Valor">
+    <button class="primary" onclick="addExpense()">Adicionar</button>
+    <div id="expenseList"></div>
+    <h3 id="totalExpenses">Total: R$ 0.00</h3>
+  </div>
+</div>
 
-      const invest = income * 0.2;
-      const reserve = income * 0.1;
-      const expenses = income * 0.5;
-      const leisure = income * 0.2;
+<script>
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+      screen.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+  }
 
-      document.getElementById('result').innerHTML = `
-        <p><strong>Investimentos (20%)</strong>: R$ ${invest.toFixed(2)}</p>
-        <p><strong>Reserva (10%)</strong>: R$ ${reserve.toFixed(2)}</p>
-        <p><strong>Gastos (50%)</strong>: R$ ${expenses.toFixed(2)}</p>
-        <p><strong>Lazer (20%)</strong>: R$ ${leisure.toFixed(2)}</p>
-      `;
-    }
-  </script>
+  function calculate() {
+    const income = document.getElementById('income').value;
+    if (!income) return;
+
+    const invest = income * 0.2;
+    const reserve = income * 0.1;
+    const expenses = income * 0.5;
+    const leisure = income * 0.2;
+
+    document.getElementById('result').innerHTML = `
+      <p><strong>Investimentos (20%)</strong>: R$ ${invest.toFixed(2)}</p>
+      <p><strong>Reserva (10%)</strong>: R$ ${reserve.toFixed(2)}</p>
+      <p><strong>Gastos (50%)</strong>: R$ ${expenses.toFixed(2)}</p>
+      <p><strong>Lazer (20%)</strong>: R$ ${leisure.toFixed(2)}</p>
+    `;
+  }
+
+  let total = 0;
+
+  function addExpense() {
+    const desc = document.getElementById('expenseDesc').value;
+    const value = parseFloat(document.getElementById('expenseValue').value);
+    if (!desc || !value) return;
+
+    total += value;
+
+    const div = document.createElement('div');
+    div.className = 'expense-item';
+    div.innerHTML = `<span>${desc}</span><span>R$ ${value.toFixed(2)}</span>`;
+    document.getElementById('expenseList').appendChild(div);
+
+    document.getElementById('totalExpenses').innerText = `Total: R$ ${total.toFixed(2)}`;
+
+    document.getElementById('expenseDesc').value = '';
+    document.getElementById('expenseValue').value = '';
+  }
+</script>
 
 </body>
 </html>
